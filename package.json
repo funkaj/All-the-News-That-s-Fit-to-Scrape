@@ -12,10 +12,21 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.16.2",
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.2",
-    "express": "^4.16.1",
-    "mongoose": "^5.0.11",
-    "morgan": "^1.9.0"
-  }
+    "express": "^4.16.3",
+    "express-handlebars": "^3.0.0",
+    "mongoose": "^5.2.17",
+    "morgan": "^1.9.0",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/funkaj/All-the-News-That-s-Fit-to-Scrape.git"
+  },
+  "bugs": {
+    "url": "https://github.com/funkaj/All-the-News-That-s-Fit-to-Scrape/issues"
+  },
+  "homepage": "https://github.com/funkaj/All-the-News-That-s-Fit-to-Scrape#readme"
 }

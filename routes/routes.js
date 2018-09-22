@@ -13,12 +13,12 @@ module.exports = function (app) {
     // A GET route for scraping the echoJS website
     app.get("/scrape", function (req, res) {
         // First, we grab the body of the html with request
-        axios.get("https://www.fantasyflightgames.com/en/news/tag/legend-of-the-five-rings-the-card-game/").then(function (response) {
+        axios.get("https://www.fantasyflightgames.com/en/news/tag/legend-of-the-five-rings-the-card-game/?page=1").then(function (response) {
             // Then, we load that into cheerio and save it to $ for a shorthand selector
             var $ = cheerio.load(response.data);
-
-            // Now, we grab every h2 within an article tag, and do the following:
+            // Now, we grab every h within an article tag, and do the following:
             $("h1").each(function (i, element) {
+                console.log(i)
                 // Save an empty result object
                 var result = {};
 
@@ -105,10 +105,11 @@ module.exports = function (app) {
             });
     });
     // Route for grabbing a specific saved Articles
-    app.get("/saved-articles", function (req, res) {
+    app.get("/saved", function (req, res) {
         // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
-        db.Article.findAll({})
-           // Now, we grab every h2 within an article tag, and do the following:
+        db.Saved.find({}).then(function (response) {
+            var $ = cheerio.load(response.data);
+           // Now, we grab every h2 within an Saved tag, and do the following:
            $("h1").each(function (i, element) {
             // Save an empty result object
             var result = {};
@@ -121,49 +122,21 @@ module.exports = function (app) {
                 .children("a")
                 .attr("href");
 
-            // Create a new Article using the `result` object built from scraping
-            db.Article.create(result)
-                .then(function (dbArticle) {
-                    // View the added result in the console
-                    console.log(dbArticle);
-                })
-                .catch(function (err) {
-                    // If an error occurred, send it to the client
-                    return res.json(err);
-                });
+            })
         });
 
     });
-    // Route for saving/updating an Article
-    app.post("/save-articles/:id", function (req, res) {
-        // Create a new article and pass the req.body to the entry
-        db.saveArticle.create(req.body)
-            .then(function (dbsaveArticle) {
-                // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
-                // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
-                // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
-                return db.Article.findOneAndUpdate({
-                    _id: req.params.id
-                }, 
-                {
-                    title: dbsaveArticle.title
-                },
-                {
-                    title: dbsaveArticle.link
-                },
-                {
-                    note: dbsaveArticle._id
-                }, {
-                    new: true
-                });
-            })
-            .then(function (dbArticle) {
-                // If we were able to successfully update an Article, send it back to the client
-                res.json(dbArticle);
-            })
-            .catch(function (err) {
-                // If an error occurred, send it to the client
-                res.json(err);
-            });
-    });
+    // Route for saving/updating an Saved
+    app.post("/saved", function(req, res) {
+        // Create a new user using req.body
+        db.Saved.create(req.body)
+          .then(function(dbSaved) {
+            // If saved successfully, send the the new User document to the client
+            res.json(dbSaved);
+          })
+          .catch(function(err) {
+            // If an error occurs, send the error to the client
+            res.json(err);
+          });
+      });
 }

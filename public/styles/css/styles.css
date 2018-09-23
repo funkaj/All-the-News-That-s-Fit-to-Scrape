@@ -1,13 +1,5 @@
 body { background-color: rgb(240, 240, 240) }
-     .article{
-       min-width: 100%;
-     }
-      #articles {
-        display: inline-block;
-        overflow: auto;
-        width: 60%;
-        height: 700px;
-      }
+    
       #notes {
         float: right;
         width: 30%;

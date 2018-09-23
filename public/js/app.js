@@ -1,31 +1,74 @@
 // Grab the articles as a json
 $(document).on("click", "#scrapeSite", function () {
+  $('#articles').empty();
   $.getJSON("/articles", function (data) {
 
-    // For each one
-    data.map(function (el) {
-      // Display the apropos information on the page
-      $("#articles").append(`<p id=${el._id} data-id=${el._id}  value=${el.title}>${el.title}</p><a href='https://www.fantasyflightgames.com${el.link} data-id=${el._id}'>Read Me</a><button class=save data-id=${el._id}>Save</button>`);
-    })
+      // For each one
+      data.map(function (el) {
+        
+        // Display the apropos information on the page
+        $('#articles').append(`
+            <div id=${el._id} class='card'>
+              <div class='card-image'>
+                <img src='https://images-cdn.fantasyflightgames.com/filer_public/09/c4/09c4b5a2-b3aa-45c8-b13a-299124c8c946/l5c15_preview7.jpg'>
+                <span data-id=${el._id} class='card-title flow-text'>${el.title}</span>
+              </div>
+              <div class='card-content'>
+                <p>I am a very simple card. I am good at containing small bits of information.
+                I am convenient because I require little markup to use effectively.</p>
+              </div>
+              <div href='https://www.fantasyflightgames.com${el.link}' class='card-action'>
+                <a href='https://www.fantasyflightgames.com${el.link}' 'data-id=${el._id} class='center-align'>Read . . .</a>
+              </div>
+              <a class="save waves-effect waves-light btn-large" data-id=${el._id} style='margin: 10px;'>Save Article</a>
+            </div>
+        `)
+        
+      })
   })
 })
 // Grab the saved articles as a json
-$(document).on("click", "#saved-articles", function () {
-  $.get("/saved", function (data) {
-    // For each one
-    console.log(' Get Saved Articles ')
-    for (var i = 0; i < data.length; i++) {
+$(document).on('click', '#saved-articles', function () {
+  $('#articles').empty();
+  console.log('clicked')
+  $.ajax({
+    method: 'GET',
+    url: '/saved'
+  }).then(function (data) {
+ 
+    data.map(function (el) {
+     
       // Display the apropos information on the page
-      $("#articles").append("<p id='"+ data[i]._id + " data-id=" + data[i]._id + "value=" + data[i].title + ">" + data[i].title + ' ' + "<button class='notes " + data[i]._id + "'>Notes</button>" + "<br />" + 'https://www.fantasyflightgames.com' + data[i].link + "</p>");
-    }
+      $('#articles').append(`
+          <div id=${el._id} class='card'>
+            <div class='card-image'>
+              <img src='https://images-cdn.fantasyflightgames.com/filer_public/09/c4/09c4b5a2-b3aa-45c8-b13a-299124c8c946/l5c15_preview7.jpg'>
+              <span data-id=${el._id} class='card-title flow-text'>${el.title}</span>
+            </div>
+            <div class='card-content'>
+              <p>I am a very simple card. I am good at containing small bits of information.
+              I am convenient because I require little markup to use effectively.</p>
+            </div>
+            <div class='card-action'>
+              <a href='https://www.fantasyflightgames.com${el.link}' 'data-id=${el._id}'>Read Me</a>
+            </div>
+            <a class="waves-effect waves-light btn-large" data-id=${el._id} style='margin: 10px;'>Notes</a>
+          </div>
+      `)
+      
+    })
   })
 })
 
+
 $(document).on("click", ".save", function () {
+
   let thisId = $(this).attr("data-id");
   let thisTitle = document.getElementById(thisId).textContent;
-  let thisLink = $(this).attr('href')
-  console.log(thisLink)
+  let thisLink = document.getElementById(thisId).children[2].getAttribute('href');
+
+  console.log(`thisLink: ${thisLink}`)
+
   // Run a POST request to save the article
   $.ajax({
       method: "POST",
@@ -39,7 +82,7 @@ $(document).on("click", ".save", function () {
       }
     }) // With that done
     .then(function (data) {
-    
+
       // Log the response
       console.log(data);
       // Empty the notes section

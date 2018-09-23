@@ -107,15 +107,23 @@ module.exports = function (app) {
     // Route for grabbing a specific saved Articles
     app.get("/saved", function (req, res) {
         // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
-        db.Saved.find({})
-            .then(function (dbSaved) {
-                // If we were able to successfully find Articles, send them back to the client
-                res.json(dbSaved);
+        db.Saved.find({}).then(function (response) {
+            var $ = cheerio.load(response.data);
+           // Now, we grab every h2 within an Saved tag, and do the following:
+           $("h1").each(function (i, element) {
+            // Save an empty result object
+            var result = {};
+
+            // Add the text and href of every link, and save them as properties of the result object
+            result.title = $(this)
+                .children("a")
+                .text();
+            result.link = $(this)
+                .children("a")
+                .attr("href");
+
             })
-            .catch(function (err) {
-                // If an error occurred, send it to the client
-                res.json(err);
-            });
+        });
 
     });
     // Route for saving/updating an Saved

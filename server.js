@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 
 // Connect to the Mongo DB
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
- let MONGODB_URI = 'mongodb://localhost/l5rscrapedb' || 'mongodb://heroku_9j6ztf8c:iiquv49qcj35q0khem4rddk828@ds211083.mlab.com:11083/heroku_9j6ztf8c';;
+ let MONGODB_URI = 'mongodb://heroku_9j6ztf8c:iiquv49qcj35q0khem4rddk828@ds211083.mlab.com:11083/heroku_9j6ztf8c' || 'mongodb://localhost/l5rscrapedb';
 
 // // Set mongoose to leverage built in JavaScript ES6 Promises
 // // Connect to the Mongo DB

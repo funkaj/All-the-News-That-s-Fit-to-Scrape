@@ -1,3 +1,6 @@
+$(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
 // Grab the articles as a json
 $(document).on("click", "#scrapeSite", function () {
   $('#articles').empty();
@@ -64,10 +67,10 @@ $(document).on('click', '#saved-articles', function () {
 $(document).on("click", ".save", function () {
 
   let thisId = $(this).attr("data-id");
-  let thisTitle = document.getElementById(thisId).textContent;
+  let thisTitle = document.getElementById(thisId).children[0].textContent;
   let thisLink = document.getElementById(thisId).children[2].getAttribute('href');
 
-  console.log(`thisLink: ${thisLink}`)
+  console.log(`thisLink: ${thisTitle}`)
 
   // Run a POST request to save the article
   $.ajax({

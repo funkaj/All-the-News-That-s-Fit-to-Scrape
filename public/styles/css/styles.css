@@ -1,5 +1,5 @@
 body { background-color: rgb(240, 240, 240) }
-    
+
       #notes {
         float: right;
         width: 30%;
@@ -16,4 +16,13 @@ body { background-color: rgb(240, 240, 240) }
       textarea {
         height: 200px;
         font-size: 18px;
-      }
+	  }
+	  @media only screen and (max-width: 900px) {
+		nav .brand-logo {
+			font-size: 1rem;
+		}
+		h2 {
+			font-size: 1.5rem;
+		}
+	}
+	 

@@ -13,7 +13,7 @@ $(document).on("click", "#scrapeSite", function () {
       $('#articles').append(`
             <div id=${el._id} class='card'>
               <div class='card-image'>
-                <img src='${el.src}'>
+                <img src='${el.img}'>
                 <span data-id=${el._id} class='card-title flow-text'>${el.title}</span>
               </div>
               <div class='card-content'>
@@ -44,7 +44,7 @@ $(document).on('click', '#saved-articles', function () {
       $('#articles').prepend(`
           <div id=${el._id} class='card'>
             <div class='card-image'>
-              <img src='${el.src}'>
+              <img src='${el.img}'>
               <span data-id=${el._id} class='card-title flow-text'>${el.title}</span>
             </div>
             <div class='card-content'>
@@ -65,10 +65,12 @@ $(document).on('click', '#saved-articles', function () {
 $(document).on("click", ".save", function () {
 
   let thisId = $(this).attr("data-id");
-  let thisTitle = document.getElementById(thisId).children[0].textContent;
+  let thisTitle = document.getElementById(thisId).children[0].children[1].textContent;
   let thisLink = document.getElementById(thisId).children[2].getAttribute('href');
+  let thisLead = document.getElementById(thisId).children[1].textContent;
+  let thisImg = document.getElementById(thisId).children[0].children[0].getAttribute('src');
 
-  console.log(`thisLink: ${thisTitle}`)
+  console.log(`thisLink: ${thisImg}`)
 
   // Run a POST request to save the article
   $.ajax({
@@ -78,8 +80,12 @@ $(document).on("click", ".save", function () {
         id: thisId,
         // Value taken from title input
         title: thisTitle,
-        // Value taken from note textarea
-        link: thisLink
+        // Value taken from link
+        link: thisLink,
+        // Value taken from lead
+        lead: thisLead,
+        // Value taken from src
+        img: thisImg
       }
     }) // With that done
     .then(function (data) {

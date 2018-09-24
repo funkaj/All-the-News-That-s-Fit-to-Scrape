@@ -32,7 +32,7 @@ module.exports = function (app) {
                     .children("h1")
                     .children('a')
                     .attr("href");
-                result.src = $(this)
+                result.img = $(this)
                     .children(".blog-img")
                     .children('a')
                     .children("img")

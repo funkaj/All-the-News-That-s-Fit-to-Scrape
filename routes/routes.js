@@ -17,19 +17,31 @@ module.exports = function (app) {
             // Then, we load that into cheerio and save it to $ for a shorthand selector
             var $ = cheerio.load(response.data);
             // Now, we grab every h within an article tag, and do the following:
-            $("h1").each(function (i, element) {
-                console.log(i)
+            $(".blog-item").each(function (i, element) {
                 // Save an empty result object
                 var result = {};
 
                 // Add the text and href of every link, and save them as properties of the result object
                 result.title = $(this)
-                    .children("a")
+                    .children(".blog-text")
+                    .children("h1")
+                    .children('a')
                     .text();
                 result.link = $(this)
-                    .children("a")
+                    .children(".blog-text")
+                    .children("h1")
+                    .children('a')
                     .attr("href");
-
+                result.src = $(this)
+                    .children(".blog-img")
+                    .children('a')
+                    .children("img")
+                    .attr('src')
+                result.lead = $(this)
+                    .children(".blog-text")
+                    .children(".blog-lead")
+                    .children('p')
+                    .text();
                 // Create a new Article using the `result` object built from scraping
                 db.Article.create(result)
                     .then(function (dbArticle) {
@@ -105,30 +117,30 @@ module.exports = function (app) {
             });
     });
     // Route for grabbing a specific saved Articles
-   // Route for getting all Articles from the db
-   app.get("/saved", function (req, res) {
-    // Grab every document in the Articles collection
-    db.Saved.find({})
-        .then(function (dbSaved) {
-            // If we were able to successfully find Saveds, send them back to the client
-            res.json(dbSaved);
-        })
-        .catch(function (err) {
-            // If an error occurred, send it to the client
-            res.json(err);
-        });
-});
+    // Route for getting all Articles from the db
+    app.get("/saved", function (req, res) {
+        // Grab every document in the Articles collection
+        db.Saved.find({})
+            .then(function (dbSaved) {
+                // If we were able to successfully find Saveds, send them back to the client
+                res.json(dbSaved);
+            })
+            .catch(function (err) {
+                // If an error occurred, send it to the client
+                res.json(err);
+            });
+    });
     // Route for saving/updating an Saved
-    app.post("/saved", function(req, res) {
+    app.post("/saved", function (req, res) {
         // Create a new user using req.body
         db.Saved.create(req.body)
-          .then(function(dbSaved) {
-            // If saved successfully, send the the new User document to the client
-            res.json(dbSaved);
-          })
-          .catch(function(err) {
-            // If an error occurs, send the error to the client
-            res.json(err);
-          });
-      });
+            .then(function (dbSaved) {
+                // If saved successfully, send the the new User document to the client
+                res.json(dbSaved);
+            })
+            .catch(function (err) {
+                // If an error occurs, send the error to the client
+                res.json(err);
+            });
+    });
 }

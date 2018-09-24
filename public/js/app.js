@@ -13,12 +13,11 @@ $(document).on("click", "#scrapeSite", function () {
       $('#articles').append(`
             <div id=${el._id} class='card'>
               <div class='card-image'>
-                <img src='https://images-cdn.fantasyflightgames.com/filer_public/09/c4/09c4b5a2-b3aa-45c8-b13a-299124c8c946/l5c15_preview7.jpg'>
+                <img src='${el.src}'>
                 <span data-id=${el._id} class='card-title flow-text'>${el.title}</span>
               </div>
               <div class='card-content'>
-                <p>I am a very simple card. I am good at containing small bits of information.
-                I am convenient because I require little markup to use effectively.</p>
+                <p>${el.lead}</p>
               </div>
               <div href='https://www.fantasyflightgames.com${el.link}' class='card-action'>
                 <a href='https://www.fantasyflightgames.com${el.link}' 'data-id=${el._id} class='center-align'>Read . . .</a>
@@ -45,12 +44,11 @@ $(document).on('click', '#saved-articles', function () {
       $('#articles').prepend(`
           <div id=${el._id} class='card'>
             <div class='card-image'>
-              <img src='https://images-cdn.fantasyflightgames.com/filer_public/09/c4/09c4b5a2-b3aa-45c8-b13a-299124c8c946/l5c15_preview7.jpg'>
+              <img src='${el.src}'>
               <span data-id=${el._id} class='card-title flow-text'>${el.title}</span>
             </div>
             <div class='card-content'>
-              <p>I am a very simple card. I am good at containing small bits of information.
-              I am convenient because I require little markup to use effectively.</p>
+              <p>${el.lead}</p>
             </div>
             <div class='card-action'>
               <a href='https://www.fantasyflightgames.com${el.link}' 'data-id=${el._id}'>Read Me</a>

@@ -1,25 +1,26 @@
-body { background-color: rgb(240, 240, 240) }
+body {
+	background-color: rgb(240, 240, 240);
+}
 
-     
-      textarea, input {
-        display: block;
-        width: 100%;
-        background-color: rgb(209, 209, 209);
-      }
-      input {
-        height: 36px;
-        font-size: 24px;
-      }
-      textarea {
-        height: 200px;
-        font-size: 18px;
-	  }
-	  @media only screen and (max-width: 900px) {
-		nav .brand-logo {
-			font-size: 1rem;
-		}
-		h2 {
-			font-size: 1.5rem;
-		}
+input {
+	height: 36px;
+	font-size: 24px;
+}
+textarea,
+input {
+	display: block;
+	width: 100%;
+	background-color: rgb(209, 209, 209);
+}
+textarea {
+	height: 200px;
+	font-size: 18px;
+}
+@media only screen and (max-width: 900px) {
+	nav .brand-logo {
+		font-size: 1rem;
 	}
-	 
+	h2 {
+		font-size: 1.5rem;
+	}
+}

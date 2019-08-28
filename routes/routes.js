@@ -1,19 +1,20 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const db = require('../models');
-
+require('moment')
 module.exports = function(app) {
 	// Routes
 	app.get('/', function(req, res) {
 		res.render('index');
 	});
-	// A GET route for scraping the echoJS website
+	// A GET route for scraping the FFG website
 	app.get('/scrape', function(req, res) {
 		axios
 			.get(
 				'https://www.fantasyflightgames.com/en/news/tag/legend-of-the-five-rings-the-card-game/?page=1'
 			)
 			.then(function(response) {
+				console.log('=======================response======================')
 				let $ = cheerio.load(response.data);
 				// Now, we grab every h within an article tag, and do the following:
 				$('.blog-item').each(function(i, element) {
@@ -24,6 +25,11 @@ module.exports = function(app) {
 						.children('.blog-text')
 						.children('h1')
 						.children('a')
+						.text();
+					result.date = $(this)
+						.children('.blog-text')
+						.children('.blog-meta')
+						.children('.meta-date')
 						.text();
 					result.link = $(this)
 						.children('.blog-text')
@@ -41,7 +47,9 @@ module.exports = function(app) {
 						.children('p')
 						.text();
 					// Create a new Article using the `result` object built from scraping
-					db.Article.create(result)
+					const query = {title: result.title}
+					console.log(query)
+					db.Article.updateMany(query, result, {upsert: true})
 						.then(function(dbArticle) {
 							console.log(dbArticle);
 						})

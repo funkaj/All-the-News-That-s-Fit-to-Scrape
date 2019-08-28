@@ -5,8 +5,11 @@ $(document).ready(function() {
 // Grab the articles as a json
 $(document).on('click', '#scrapeSite', function() {
 	$('#articles').empty();
+
 	$.getJSON('/articles', function(data) {
+		console.log(data)
 		data.map(function(el) {
+			console.log(el.date)
 			$('#articles').append(`
             <div id=${el._id} class='card'>
               <div class='card-image'>
@@ -28,12 +31,12 @@ $(document).on('click', '#scrapeSite', function() {
 // Grab the saved articles as a json
 $(document).on('click', '#saved-articles', function() {
 	$('#articles').empty();
-	console.log('clicked');
 	$.ajax({
 		method: 'GET',
 		url: '/saved',
 	}).then(function(data) {
 		data.map(function(el) {
+		
 			$('#articles').prepend(`
           <div id=${el._id} class='card'>
             <div class='card-image'>

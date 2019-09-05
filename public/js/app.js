@@ -1,3 +1,4 @@
+
 $(document).ready(function() {
 	$('.sidenav').sidenav();
 });
@@ -7,9 +8,13 @@ $(document).on('click', '#scrapeSite', function() {
 	$('#articles').empty();
 
 	$.getJSON('/articles', function(data) {
-		console.log(data)
+			
+		let sort = data.sort((e, f) => {
+			return moment(f.date).format('YYYYMMDD') - moment(e.date).format('YYYYMMDD')
+		})
+		sort.map(g => console.log(g.date + "  " + g.title))
+		
 		data.map(function(el) {
-			console.log(el.date)
 			$('#articles').append(`
             <div id=${el._id} class='card'>
               <div class='card-image'>
@@ -36,7 +41,6 @@ $(document).on('click', '#saved-articles', function() {
 		url: '/saved',
 	}).then(function(data) {
 		data.map(function(el) {
-		
 			$('#articles').prepend(`
           <div id=${el._id} class='card'>
             <div class='card-image'>

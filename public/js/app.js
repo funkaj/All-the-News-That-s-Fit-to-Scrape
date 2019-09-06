@@ -1,6 +1,27 @@
 $(document).ready(function() {
 	$('.sidenav').sidenav();
 });
+$(document).on('click', '.scrapeRpg', function() {
+	$('#articles').empty();
+	$.getJSON('/rpg', function(data) {
+		let sort = data.sort((e, f) => {
+			return (
+				moment(f.date).format('YYYYMMDD') - moment(e.date).format('YYYYMMDD')
+			);
+		});
+		sort.map(g => console.log(g.date + '  ' + g.title));
+		data.map(function(el) {
+			$('#articles').append(
+				`<div id=${el._id} class="card blue-grey darken-1">
+					<div class="card-content white-text">
+						<span data-id=${el._id} class='card-title flow-text'>${el.title}</span>
+						<a href='${el.link}' 'data-id=${el._id} class='center-align'>Read . . .</a>
+					</div>
+				</div>`
+				);
+		});
+	});
+});
 // Grab fictions from database
 $(document).on('click', '.scrapeFiction', function() {
 	$('#articles').empty();
@@ -12,21 +33,17 @@ $(document).on('click', '.scrapeFiction', function() {
 		});
 		sort.map(g => console.log(g.date + '  ' + g.title));
 		data.map(function(el) {
-			$('#articles').append(`
-            <div id=${el._id} class='card'>
-            <div class='card-image'>
-                <img src='${el.img}'>
-                <span data-id=${el._id} class='card-title flow-text'>${el.title}</span>
-            </div>
-            <div href='${el.link}' class='card-action'>
-                <a href='${el.link}' 'data-id=${el._id} class='center-align'>Read . . .</a>
-            </div>
-            <a class="save waves-effect waves-light btn-large" data-id=${el._id} style='margin: 10px;'>Save Article</a>
-            </div>
-        `);
+			$('#articles').append(
+				`<div id=${el._id} class="card blue-grey darken-1">
+					<div class="card-content white-text">
+						<span data-id=${el._id} class='card-title flow-text'>${el.title}</span>
+						<a href='${el.link}' 'data-id=${el._id} class='center-align'>Read . . .</a>
+					</div>
+				</div>`
+			);
 		});
-	})
-})
+	});
+});
 // Grab the articles as a json
 $(document).on('click', '.scrapeArticles', function() {
 	$('#articles').empty();
@@ -52,7 +69,6 @@ $(document).on('click', '.scrapeArticles', function() {
             <div href='https://www.fantasyflightgames.com${el.link}' class='card-action'>
                 <a href='https://www.fantasyflightgames.com${el.link}' 'data-id=${el._id} class='center-align'>Read . . .</a>
             </div>
-            <a class="save waves-effect waves-light btn-large" data-id=${el._id} style='margin: 10px;'>Save Article</a>
             </div>
         `);
 		});

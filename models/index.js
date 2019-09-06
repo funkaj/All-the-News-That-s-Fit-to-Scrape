@@ -4,5 +4,6 @@ module.exports = {
 	Article: require('./Article'),
 	Fiction: require('./Fiction'),
 	Note: require('./Note'),
+	Rpg: require('./Rpg'),
 	Saved: require('./Saved'),
 };

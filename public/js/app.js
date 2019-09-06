@@ -1,33 +1,58 @@
-
 $(document).ready(function() {
 	$('.sidenav').sidenav();
 });
-
-// Grab the articles as a json
-$(document).on('click', '#scrapeSite', function() {
+// Grab fictions from database
+$(document).on('click', '.scrapeFiction', function() {
 	$('#articles').empty();
-
-	$.getJSON('/articles', function(data) {
-			
+	$.getJSON('/fiction', function(data) {
 		let sort = data.sort((e, f) => {
-			return moment(f.date).format('YYYYMMDD') - moment(e.date).format('YYYYMMDD')
-		})
-		sort.map(g => console.log(g.date + "  " + g.title))
-		
+			return (
+				moment(f.date).format('YYYYMMDD') - moment(e.date).format('YYYYMMDD')
+			);
+		});
+		sort.map(g => console.log(g.date + '  ' + g.title));
 		data.map(function(el) {
 			$('#articles').append(`
             <div id=${el._id} class='card'>
-              <div class='card-image'>
+            <div class='card-image'>
                 <img src='${el.img}'>
                 <span data-id=${el._id} class='card-title flow-text'>${el.title}</span>
-              </div>
-              <div class='card-content'>
+            </div>
+            <div href='${el.link}' class='card-action'>
+                <a href='${el.link}' 'data-id=${el._id} class='center-align'>Read . . .</a>
+            </div>
+            <a class="save waves-effect waves-light btn-large" data-id=${el._id} style='margin: 10px;'>Save Article</a>
+            </div>
+        `);
+		});
+	})
+})
+// Grab the articles as a json
+$(document).on('click', '.scrapeArticles', function() {
+	$('#articles').empty();
+
+	$.getJSON('/articles', function(data) {
+		let sort = data.sort((e, f) => {
+			return (
+				moment(f.date).format('YYYYMMDD') - moment(e.date).format('YYYYMMDD')
+			);
+		});
+		sort.map(g => console.log(g.date + '  ' + g.title));
+
+		data.map(function(el) {
+			$('#articles').append(`
+            <div id=${el._id} class='card'>
+            <div class='card-image'>
+                <img src='${el.img}'>
+                <span data-id=${el._id} class='card-title flow-text'>${el.title}</span>
+            </div>
+            <div class='card-content'>
                 <p>${el.lead}</p>
-              </div>
-              <div href='https://www.fantasyflightgames.com${el.link}' class='card-action'>
+            </div>
+            <div href='https://www.fantasyflightgames.com${el.link}' class='card-action'>
                 <a href='https://www.fantasyflightgames.com${el.link}' 'data-id=${el._id} class='center-align'>Read . . .</a>
-              </div>
-              <a class="save waves-effect waves-light btn-large" data-id=${el._id} style='margin: 10px;'>Save Article</a>
+            </div>
+            <a class="save waves-effect waves-light btn-large" data-id=${el._id} style='margin: 10px;'>Save Article</a>
             </div>
         `);
 		});
@@ -42,20 +67,19 @@ $(document).on('click', '#saved-articles', function() {
 	}).then(function(data) {
 		data.map(function(el) {
 			$('#articles').prepend(`
-          <div id=${el._id} class='card'>
+        <div id=${el._id} class='card'>
             <div class='card-image'>
-              <img src='${el.img}'>
-              <span data-id=${el._id} class='card-title flow-text'>${el.title}</span>
+            <img src='${el.img}'>
+            <span data-id=${el._id} class='card-title flow-text'>${el.title}</span>
             </div>
             <div class='card-content'>
-              <p>${el.lead}</p>
+            <p>${el.lead}</p>
             </div>
             <div class='card-action'>
-              <a href='https://www.fantasyflightgames.com${el.link}' 'data-id=${el._id}'>Read Me</a>
+            <a href='https://www.fantasyflightgames.com${el.link}' 'data-id=${el._id}'>Read Me</a>
             </div>
             <a class="note waves-effect waves-light btn-large" data-id=${el._id} style='margin: 10px;'>Notes</a>
-          </div>
-      `);
+        </div>`);
 		});
 	});
 });

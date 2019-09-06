@@ -1,7 +1,8 @@
 const axios = require('axios');
+
 const cheerio = require('cheerio');
 const db = require('../models');
-const moment = require('moment')
+const moment = require('moment');
 module.exports = function(app) {
 	// Routes
 	app.get('/', function(req, res) {
@@ -14,7 +15,9 @@ module.exports = function(app) {
 				'https://www.fantasyflightgames.com/en/news/tag/legend-of-the-five-rings-the-card-game/?page=1'
 			)
 			.then(function(response) {
-				console.log('=======================SCRAPE response======================')
+				console.log(
+					'=======================SCRAPE response======================'
+				);
 				let $ = cheerio.load(response.data);
 				// Now, we grab every h within an article tag, and do the following:
 				$('.blog-item').each(function(i, element) {
@@ -31,7 +34,7 @@ module.exports = function(app) {
 						.children('.blog-meta')
 						.children('.meta-date')
 						.text();
-					result.date = moment(oldDate).format('YYYY-MM-DD')
+					result.date = moment(oldDate).format('YYYY-MM-DD');
 					result.link = $(this)
 						.children('.blog-text')
 						.children('h1')
@@ -48,9 +51,9 @@ module.exports = function(app) {
 						.children('p')
 						.text();
 					// Create a new Article using the `result` object built from scraping
-					const query = {title: result.title}
-					console.log(query)
-					db.Article.updateMany(query, result, {upsert: true})
+					const query = { title: result.title };
+					console.log(query);
+					db.Article.updateMany(query, result, { upsert: true })
 						.then(function(dbArticle) {
 							console.log(dbArticle);
 						})
@@ -61,44 +64,58 @@ module.exports = function(app) {
 				res.render('index');
 			});
 	});
-	app.get('/products', function(req, res) {
-		axios
-			.get(
-				'https://www.fantasyflightgames.com/en/products/legend-of-the-five-rings-the-card-game/'
-			)
-			.then(function(response) {
-				console.log('=======================PRODUCTS response======================')
-				let $ = cheerio.load(response.data);
-				// Now, we grab every h within an article tag, and do the following:
-				$('.collection-header').each(function(i, element) {
-					// Save an empty result object
-					const result = {};
-					// Add the text and href of every link, and save them as properties of the result object
-					result.title = $(this)
-					
-						.text();
-					
-					// Create a new Article using the `result` object built from scraping
-					const query = {title: result.title}
-					console.log('//////////////////////////////')
-					console.log(result)
-					// db.Products.updateMany(query, result, {upsert: true})
-					// 	.then(function(dbProducts) {
-					// 		console.log(dbProducts);
-					// 	})
-					// 	.catch(function(err) {
-					// 		return res.json(err);
-					// 	});
-				});
-				res.render('index');
+	app.get('/scrape/fiction', function(req, res) {
+		console.log('Scraping');
+		const url =
+			'https://www.fantasyflightgames.com/en/legend-of-the-five-rings-fiction/';
+
+		axios.get(url).then(function(response) {
+			console.log(
+				'=======================SCRAPE response======================'
+			);
+			let $ = cheerio.load(response.data);
+
+			// Now, we grab every h within an article tag, and do the following:
+			$('.support-item').each(function(i, element) {
+		
+				// Save an empty result object
+				const result = {};
+				// Add the text and href of every link, and save them as properties of the result object
+				result.title = $(this)
+					// .children('a')
+					.children('.title')
+					.text()
+				let oldDate = $(this)
+					// .children('a')
+					.children('.date')
+					.text();
+				result.date = moment(oldDate).format('YYYY-MM-DD');
+				result.link = $(this)
+					.attr('href');
+				// result.img = $(this)
+				// 	.children('.blog-img')
+				// 	.children('a')
+				// 	.children('img')
+				// 	.attr('src');
+				// Create a new Article using the `result` object built from scraping
+				const query = { title: result.title };
+				console.log(query);
+				db.Fiction.updateMany(query, result, { upsert: true })
+					.then(function(dbFiction) {
+						console.log(dbFiction);
+					})
+					.catch(function(err) {
+						return res.json(err);
+					});
 			});
+			res.render('index');
+		});
 	});
 
 	// Route for getting all Articles from the db
 	app.get('/articles', function(req, res) {
 		db.Article.find({})
 			.then(function(dbArticle) {
-			
 				res.json(dbArticle);
 			})
 			.catch(function(err) {
@@ -120,6 +137,16 @@ module.exports = function(app) {
 			});
 	});
 
+	// Route for getting all Articles from the db
+	app.get('/fiction', function(req, res) {
+		db.Fiction.find({})
+			.then(function(dbFiction) {
+				res.json(dbFiction);
+			})
+			.catch(function(err) {
+				res.json(err);
+			});
+	});
 	// Route for grabbing a specific saved Articles
 	app.get('/saved', function(req, res) {
 		db.Saved.find({})

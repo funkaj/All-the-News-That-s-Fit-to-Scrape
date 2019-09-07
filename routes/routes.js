@@ -8,6 +8,7 @@ module.exports = function(app) {
 	app.get('/', function(req, res) {
 		res.render('index');
 	});
+	// route for scraping by id
 	app.get('/scraped/:id', function(req, res) {
 		let id = req.params.id
 		let url;

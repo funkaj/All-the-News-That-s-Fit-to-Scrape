@@ -16,6 +16,7 @@ $(document).on('click', '.scrapeRpg', function() {
 					<div class="card-content white-text">
 						<span data-id=${el._id} class='card-title flow-text'>${el.title}</span>
 						<a href='${el.link}' 'data-id=${el._id} class='center-align'>Read . . .</a>
+						<p>${moment(el.date).format('MM/DD/YYYY')}</p>
 					</div>
 				</div>`
 				);
@@ -38,6 +39,7 @@ $(document).on('click', '.scrapeFiction', function() {
 					<div class="card-content white-text">
 						<span data-id=${el._id} class='card-title flow-text'>${el.title}</span>
 						<a href='${el.link}' 'data-id=${el._id} class='center-align'>Read . . .</a>
+						<p>${moment(el.date).format('MM/DD/YYYY')}</p>
 					</div>
 				</div>`
 			);

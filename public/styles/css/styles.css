@@ -6,11 +6,31 @@ input {
 	height: 36px;
 	font-size: 24px;
 }
+.right > li:hover {
+	font-size: 110%;
+}
+.right {
+	margin-right: 20px;
+}
+.brand-logo {
+	margin-left: 30px;
+}
+.center-align {
+	text-decoration: none;
+	color: rgba(255, 255, 255, 0.664);
+	font-size: 1rem;
+	margin: 10px;
+}
+.center-align:hover {
+	text-decoration: none;
+	color: rgb(255, 255, 255);
+	font-size: 110%;
+}
 textarea,
 input {
 	display: block;
 	width: 100%;
-	background-color: rgb(209, 209, 209);
+	background-color: rgba(209, 209, 209, 0.801);
 }
 textarea {
 	height: 200px;
